@@ -7,7 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server",
-    "build": "webpack"
+    "dev-packages": "lerna run --parallel --stream dev",
+    "build-packages": "lerna run build",
+    "build": "yarn build-packages && webpack"
   },
   "repository": {
     "type": "git",
@@ -40,6 +42,7 @@
     "file-loader": "^4.3.0",
     "food": "1.0.0",
     "html-webpack-plugin": "^3.2.0",
+    "lerna": "^3.19.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
