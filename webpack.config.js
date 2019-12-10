@@ -2,6 +2,13 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const fs = require('fs');
+const CopyPlugin = require('copy-webpack-plugin');
+const copyPluginConfig = fs.readdirSync(path.join(__dirname, 'packages/')).map((packageName) => ({
+  from: path.join(__dirname, 'node_modules', packageName, 'dist'),
+  to: './',
+  ignore: 'bundle.js',
+}));
 
 module.exports = {
   entry: "./src/index.js",
@@ -12,7 +19,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: "babel-loader",
-        options: { presets: ["@babel/env"] }
+        options: { presets: ["@babel/env", "@babel/preset-react"] }
       },
       {
         test: /\.css$/,
@@ -26,7 +33,10 @@ module.exports = {
       },
     ]
   },
-  resolve: { extensions: ["*", ".js", ".jsx"] },
+  resolve: {
+    extensions: ["*", ".js", ".jsx"],
+    symlinks: true,
+  },
   output: {
     path: path.resolve(__dirname, "dist/"),
     filename: "bundle.[hash].js"
@@ -41,5 +51,6 @@ module.exports = {
       title: 'Meetup demo Website',
       template: 'index.html',
     }),
+    new CopyPlugin(copyPluginConfig),
   ]
 };
